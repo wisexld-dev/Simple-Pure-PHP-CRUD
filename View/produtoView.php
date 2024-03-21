@@ -114,8 +114,8 @@
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-select" name="edit_status" id="edit_status" required>
-                                    <option value="1">Ativo</option>
-                                    <option value="0">Inativo</option>
+                                    <option value="true">Ativo</option>
+                                    <option value="false">Inativo</option>
                                 </select>
                                 <div class="invalid-feedback">Por favor, selecione o status do produto.</div>
                             </div>
@@ -168,9 +168,13 @@
                     modal.find('#edit_id').val(produtoId);
                     modal.find('#edit_codigo').val(produtoCodigo);
                     modal.find('#edit_descricao').val(produtoDescricao);
-                    modal.find('#edit_status').val(produtoStatus).change();
                     modal.find('#edit_tempo_garantia').val(produtoTempoGarantia);
 
+                    if (produtoStatus) {
+                        modal.find('#edit_status').val('true');
+                    } else {
+                        modal.find('#edit_status').val('false');
+                    }
                 });
 
                 // Salvar alteração produto
@@ -204,7 +208,6 @@
                             }).then((result => {
                                 if (result.isConfirmed) {
                                     $('#modalEditarProduto').modal('hide');
-                                    // Redirecionar o usuário para a próxima página
                                     window.location = window.location.href;
                                 }
                             }));
