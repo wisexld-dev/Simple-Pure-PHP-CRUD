@@ -79,7 +79,7 @@
                                 <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Endereço do cliente" required>
                                 <div class="invalid-feedback">Por favor, informe o endereço do cliente.</div>
                             </div>
-                            <button id="btnSalvarNovoCliente" class="btn btn-primary">Salvar</button>
+                            <button type="button" id="btnSalvarNovoCliente" class="btn btn-primary">Salvar</button>
                         </form>
                     </div>
                 </div>
@@ -122,6 +122,7 @@
 
         <script>
             $(document).ready(function() {
+                // Função para carregar dados do cliente no modal de edição
                 $('#modalEditarCliente').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
                     var clienteId = button.data('cliente-id');
@@ -134,18 +135,15 @@
                     modal.find('#edit_nome').val(clienteNome);
                     modal.find('#edit_cpf').val(clienteCPF);
                     modal.find('#edit_endereco').val(clienteEndereco);
-
                 });
 
-                // Salvar alteração cliente
+                // Função para salvar alterações do cliente
                 $('#btnSalvar').on('click', async function() {
-                    // Capturar dados do formulário
                     var id = $('#edit_id').val();
                     var nome = $('#edit_nome').val();
                     var cpf = $('#edit_cpf').val();
                     var endereco = $('#edit_endereco').val();
 
-                    // Enviar dados via AJAX
                     await $.ajax({
                         url: '/Controller/clienteController.php',
                         method: 'PUT',
@@ -166,21 +164,18 @@
                             }).then((result => {
                                 if (result.isConfirmed) {
                                     $('#modalEditarCliente').modal('hide');
-                                    // Redirecionar o usuário para a próxima página
                                     window.location = window.location.href;
                                 }
                             }));
                         },
                         error: function(xhr, status, error) {
-                            // Lidar com erros de requisição
                             console.error(error);
-                            // Por exemplo, exibir uma mensagem de erro ao usuário
-                            alert('Erro ao alterar informações cliente. Por favor, tente novamente.');
+                            alert('Erro ao alterar informações do cliente. Por favor, tente novamente.');
                         }
                     });
                 });
 
-
+                // Função para excluir cliente
                 $('#btnExcluir').on('click', function() {
                     Swal.fire({
                         title: 'Tem certeza?',
@@ -193,7 +188,6 @@
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Enviar dados via AJAX
                             $.ajax({
                                 url: '/Controller/clienteController.php',
                                 method: 'DELETE',
@@ -205,22 +199,18 @@
 
                                     await Swal.fire({
                                         icon: 'success',
-                                        title: 'Cliente alterado com sucesso!',
+                                        title: 'Cliente excluído com sucesso!',
                                         showConfirmButton: true,
                                         confirmButtonText: "Ok"
                                     }).then((result => {
                                         if (result.isConfirmed) {
                                             $('#modalEditarCliente').modal('hide');
-                                            // Redirecionar o usuário para a próxima página
                                             window.location = window.location.href;
                                         }
                                     }));
                                 },
                                 error: function(xhr, status, error) {
-                                    // Lidar com erros de requisição
-                                    console.error(error);
-                                    // Por exemplo, exibir uma mensagem de erro ao usuário
-                                    alert('Erro ao alterar informações cliente. Por favor, tente novamente.');
+                                    alert('Erro ao excluir cliente. Por favor, tente novamente.');
                                 }
                             });
                             Swal.fire(
@@ -229,56 +219,50 @@
                                 'success'
                             ).then(() => {
                                 $('#modalEditarCliente').modal('hide');
-                                // Atualize a tabela ou a interface do usuário conforme necessário
                             });
                         }
                     });
                 });
-            });
 
-            // Adicionar evento de cancelar
-            $('#btnCancelar').on('click', function() {
-                $('#modalEditarCliente').modal('hide');
-            });
+                // Função para cancelar edição do cliente
+                $('#btnCancelar').on('click', function() {
+                    $('#modalEditarCliente').modal('hide');
+                });
 
+                // Função para salvar novo cliente
+                $('#btnSalvarNovoCliente').on('click', async function() {
+                    var nome = $('#nome').val();
+                    var cpf = $('#cpf').val();
+                    var endereco = $('#endereco').val();
 
-            // Salvar novo Cliente
-            $('#btnSalvarNovoCliente').on('click', async function() {
-                // Capturar dados do formulário
-                var nome = $('#nome').val();
-                var cpf = $('#cpf').val();
-                var endereco = $('#endereco').val();
+                    $.ajax({
+                        url: '/Controller/clienteController.php',
+                        method: 'POST',
+                        data: {
+                            nome: nome,
+                            cpf: cpf,
+                            endereco: endereco
+                        },
+                        success: async function(response) {
+                            console.log(response);
 
-                // Enviar dados via AJAX
-                await $.ajax({
-                    url: '/Controller/clienteController.php',
-                    method: 'POST',
-                    data: {
-                        nome: nome,
-                        cpf: cpf,
-                        endereco: endereco
-                    },
-                    success: async function(response) {
-                        console.log(response);
-
-                        await Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente cadastrado com sucesso!',
-                            showConfirmButton: true,
-                            confirmButtonText: "Ok"
-                        }).then((result => {
-                            if (result.isConfirmed) {
-                                // Redirecionar o usuário para a próxima página
-                                window.location = window.location.href;
-                            }
-                        }));
-                    },
-                    error: function(xhr, status, error) {
-                        // Lidar com erros de requisição
-                        console.error(error);
-                        // Por exemplo, exibir uma mensagem de erro ao usuário
-                        alert('Erro ao salvar novo cliente. Por favor, tente novamente.');
-                    }
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'Novo cliente cadastrado com sucesso!',
+                                showConfirmButton: true,
+                                confirmButtonText: "Ok"
+                            }).then((result => {
+                                if (result.isConfirmed) {
+                                    $('#modalEditarCliente').modal('hide');
+                                    window.location = window.location.href;
+                                }
+                            }));
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                            alert('Erro ao salvar novo cliente. Por favor, tente novamente.');
+                        }
+                    });
                 });
             });
         </script>
