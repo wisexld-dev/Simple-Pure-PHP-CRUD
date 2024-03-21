@@ -155,6 +155,7 @@
                 });;
             });
 
+            // Abrir modal de Edição e Carregar Dados
             $(document).ready(function() {
                 $('#modalEditarProduto').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
@@ -179,14 +180,12 @@
 
                 // Salvar alteração produto
                 $('#btnSalvar').on('click', async function() {
-                    // Capturar dados do formulário
                     var produtoId = $('#edit_id').val();
                     var produtoCodigo = $('#edit_codigo').val();
                     var descricao = $('#edit_descricao').val();
                     var status = $('#edit_status').val();
                     var tempo_garantia = $('#edit_tempo_garantia').val();
 
-                    // Enviar dados via AJAX
                     await $.ajax({
                         url: '/Controller/produtoController.php',
                         method: 'PUT',
@@ -220,6 +219,7 @@
                 });
 
 
+                // Função de Exclusão do Produto
                 $('#btnExcluir').on('click', function() {
                     Swal.fire({
                         title: 'Tem certeza?',
@@ -232,7 +232,6 @@
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Enviar dados via AJAX
                             $.ajax({
                                 url: '/Controller/produtoController.php',
                                 method: 'DELETE',
@@ -244,13 +243,12 @@
 
                                     await Swal.fire({
                                         icon: 'success',
-                                        title: 'Produto alterado com sucesso!',
+                                        title: 'Produto excluído com sucesso!',
                                         showConfirmButton: true,
                                         confirmButtonText: "Ok"
                                     }).then((result => {
                                         if (result.isConfirmed) {
                                             $('#modalEditarProduto').modal('hide');
-                                            // Redirecionar o usuário para a próxima página
                                             window.location = window.location.href;
                                         }
                                     }));
@@ -265,7 +263,6 @@
                                 'success'
                             ).then(() => {
                                 $('#modalEditarProduto').modal('hide');
-                                // Atualize a tabela ou a interface do usuário conforme necessário
                             });
                         }
                     });
@@ -278,8 +275,6 @@
                     var status = $('#status').val();
                     var tempo_garantia = $('#tempo_garantia').val();
 
-                    // Enviar dados via AJAX
-
                     await $.ajax({
                         url: '/Controller/produtoController.php',
                         method: 'POST',
@@ -289,9 +284,6 @@
                             tempo_garantia: tempo_garantia
                         },
                         success: async function(response) {
-                            console.log(response);
-
-                            // Exibir mensagem de sucesso com SweetAlert2
                             await Swal.fire({
                                 icon: 'success',
                                 title: 'Produto cadastrado com sucesso!',
@@ -300,15 +292,11 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.href = window.location
-                                    // Redirecionar ou fazer outra ação após confirmação
-                                    //window.location.href = window.location // Recarregar a página, por exemplo
                                 }
                             });
                         },
                         error: function(xhr, status, error) {
-                            // Lidar com erros de requisição
                             console.error(error);
-                            // Exibir mensagem de erro ao usuário
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Erro ao cadastrar produto',
@@ -319,7 +307,7 @@
                 });
             });
 
-            // Adicionar evento de cancelar
+            // Evento de Cancelamento da Edição
             $('#btnCancelar').on('click', function() {
                 $('#modalEditarProduto').modal('hide');
             });
