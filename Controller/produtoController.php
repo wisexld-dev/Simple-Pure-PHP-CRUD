@@ -6,7 +6,7 @@ require_once("../Model/produtoModel.php");
 
 class produtoController extends Controller
 {
-    private $produto;
+    public $produto;
 
     public function __construct()
     {
@@ -39,7 +39,12 @@ class produtoController extends Controller
 
     private function handleGetRequest()
     {
-        $this->produto->listarProdutos();
+        require_once("../Model/produtoModel.php");
+
+        $obj = new Produto();
+        $produtos = $obj->listarProdutos();
+
+        require_once("../View/produtoView.php");
     }
 
     private function handlePostRequest()

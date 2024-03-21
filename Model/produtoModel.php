@@ -34,18 +34,34 @@ class Produto extends Model
         if ($this->connection->statusConexao() === "Conectado") {
             try {
 
-                $query = "INSERT INTO produtos (codigo, descricao, status, tempo_garantia) VALUES (:descricao, :status, :tempo_garantia)";
+                // Gerar código aleatório
+                $randomCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+                $tempo_garantia = !empty($dados["tempo_garantia"]) ? $dados["tempo_garantia"] : null;
+
+                // Preparar a consulta SQL
+                $query = "INSERT INTO produtos (codigo, descricao, status, tempo_garantia) VALUES (:codigo, :descricao, :status, :tempo_garantia)";
                 $query_exec = $this->connection->prepare($query);
 
+                // Vincular parâmetros
+                $query_exec->bindParam(":codigo", $randomCode);
                 $query_exec->bindParam(":descricao", $dados["descricao"]);
                 $query_exec->bindParam(":status", $dados["status"]);
-                $query_exec->bindParam(":tempo_garantia", $dados["tempo_garantia"]);
+                $query_exec->bindParam(":tempo_garantia", $tempo_garantia);
 
-                $query_exec->execute();
+                // Executar a consulta
+                $success = $query_exec->execute();
 
-                return json_encode("{status: \"OK\", message: \"Produto cadastrado!\"}");
+                if ($success) {
+                    // Retornar uma resposta JSON válida
+                    return json_encode(["status" => "OK", "message" => "Produto cadastrado!"]);
+                } else {
+                    // Retornar uma mensagem de erro
+                    return json_encode(["status" => "Erro", "message" => "Erro ao executar a consulta: " . implode(", ", $query_exec->errorInfo())]);
+                }
             } catch (PDOException $e) {
-                return $e->getMessage();
+                // Em caso de erro, retornar uma mensagem de erro
+                return json_encode(["status" => "Erro", "message" => $e->getMessage()]);
             }
         }
     }
