@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Clientes</title>
+    <title>Página de Produtos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -23,91 +23,106 @@
             <div class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
                 <button class="btn btn-outline-primary me-2" type="button">Pesquisar</button>
-                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalNovoCliente">
+                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalNovoProduto">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Tabela de Clientes -->
+        <!-- Tabela de Produtos -->
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">CPF</th>
-                    <th scope="col">Endereço</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Descricao</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tempo de Garantia</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                foreach ($clientes as $cliente) { ?>
+                foreach ($produtos as $produto) { ?>
 
-                    <tr data-bs-toggle="modal" data-bs-target="#modalEditarCliente" data-cliente-id="<?php echo $cliente['id'] ?>" data-cliente-nome="<?php echo $cliente['nome'] ?>" data-cliente-cpf="<?php echo $cliente['cpf'] ?>" data-cliente-endereco="<?php echo $cliente['endereco'] ?>">
-                        <th scope="row"><?php echo $cliente['id'] ?></th>
-                        <td><?php echo $cliente['nome'] ?></td>
-                        <td><?php echo $cliente['cpf'] ?></td>
-                        <td><?php echo $cliente['endereco'] ?></td>
+                    <tr data-bs-toggle="modal" data-bs-target="#modalEditarProduto" data-produto-id="<?php echo $produto['id'] ?>" data-produto-codigo="<?php echo $produto['codigo'] ?>" data-produto-descricao="<?php echo $produto['descricao'] ?>" data-produto-status="<?php echo $produto['status'] ?>" data-produto-tempo_garantia=" <?php echo $produto['tempo_garantia'] !== null ? date("d/m/Y", strtotime($produto['tempo_garantia'])) : null ?>">
+                        <th scope="row"><?php echo $produto['id'] ?></th>
+                        <th scope="row"><?php echo $produto['codigo'] ?></th>
+                        <td><?php echo $produto['descricao'] ?></td>
+                        <td><?php echo $produto['status'] == 1 ? 'Ativo' : 'Inativo' ?></td>
+                        <td><?php echo $produto['tempo_garantia'] !== null ? date("d/m/Y", strtotime($produto['tempo_garantia'])) : null ?></td>
                     </tr>
 
                 <?php } ?>
             </tbody>
         </table>
 
-        <!-- Modal Novo Cliente -->
-        <div class="modal fade" id="modalNovoCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal Novo Produto -->
+        <div class="modal fade" id="modalNovoProduto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Novo Cliente</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Novo Produto</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formNovoCliente">
+                        <form id="formNovoProduto">
                             <div class="mb-3">
-                                <label for="nome" class="form-label">Nome</label>
-                                <input type="text" class="form-control" name="nome" id="nome" placeholder="Nome do cliente" required>
-                                <div class="invalid-feedback">Por favor, informe o nome do cliente.</div>
+                                <label for="descricao" class="form-label">Descricao</label>
+                                <input type="text" class="form-control" name="descricao" id="descricao" placeholder="Nome do Produto" required>
+                                <div class="invalid-feedback">Por favor, informe a descricao do Produto.</div>
                             </div>
                             <div class="mb-3">
-                                <label for="cpf" class="form-label">CPF</label>
-                                <input type="text" class="form-control" name="cpf" id="cpf" placeholder="CPF do cliente" required>
-                                <div class="invalid-feedback">Por favor, informe o CPF do cliente.</div>
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" name="status" id="status" required>
+                                    <option value="true">Ativo</option>
+                                    <option value="false">Inativo</option>
+                                </select>
+                                <div class="invalid-feedback">Por favor, selecione o status do produto.</div>
                             </div>
                             <div class="mb-3">
-                                <label for="endereco" class="form-label">Endereço</label>
-                                <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Endereço do cliente" required>
-                                <div class="invalid-feedback">Por favor, informe o endereço do cliente.</div>
+                                <label for="tempo_garantia" class="form-label">Tempo de Garantia</label>
+                                <input type="text" class="form-control" name="tempo_garantia" id="tempo_garantia" placeholder="Tempo de Garantia do Produto">
+                                <div class="invalid-feedback">Por favor, informe o tempo de garantia do Produto.</div>
                             </div>
-                            <button id="btnSalvarNovoCliente" class="btn btn-primary">Salvar</button>
+                            <button type="button" id="btnSalvarNovoProduto" class="btn btn-primary">Salvar</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Edição de Cliente -->
-        <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Modal Edição de Produto -->
+        <div class="modal fade" id="modalEditarProduto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Editar Cliente</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Editar Produto</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form>
-                            <input type="text" class="form-control" id="edit_id" hidden>
+                            <input type="text" class="form-control" name="edit_id" id="edit_id" placeholder="Nome do Produto" hidden>
                             <div class="mb-3">
-                                <label for="edit_nome" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="edit_nome">
+                                <label for="descricao" class="form-label">Código</label>
+                                <input type="text" class="form-control" name="edit_codigo" id="edit_codigo" placeholder="Código do Produto" disabled>
                             </div>
                             <div class="mb-3">
-                                <label for="edit_cpf" class="form-label">CPF</label>
-                                <input type="text" class="form-control" id="edit_cpf">
+                                <label for="descricao" class="form-label">Descricao</label>
+                                <input type="text" class="form-control" name="edit_descricao" id="edit_descricao" placeholder="Nome do Produto" required>
+                                <div class="invalid-feedback">Por favor, informe a descricao do Produto.</div>
                             </div>
                             <div class="mb-3">
-                                <label for="edit_endereco" class="form-label">Endereço</label>
-                                <input type="text" class="form-control" id="edit_endereco">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" name="edit_status" id="edit_status" required>
+                                    <option value="1">Ativo</option>
+                                    <option value="0">Inativo</option>
+                                </select>
+                                <div class="invalid-feedback">Por favor, selecione o status do produto.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tempo_garantia" class="form-label">Tempo de Garantia</label>
+                                <input type="text" class="form-control" name="edit_tempo_garantia" id="edit_tempo_garantia" placeholder="Tempo de Garantia do Produto">
+                                <div class="invalid-feedback">Por favor, informe o tempo de garantia do Produto.</div>
                             </div>
                         </form>
                     </div>
@@ -120,52 +135,75 @@
             </div>
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#modalEditarCliente').on('show.bs.modal', function(event) {
+                $('#tempo_garantia').datepicker({
+                    format: 'dd/mm/yyyy', // Formato da data
+                    autoclose: true, // Fecha o datepicker ao selecionar uma data
+                    todayHighlight: true // Destaca o dia atual
+                }).on('show.bs.modal', function(event) {
+                    event.stopPropagation();
+                });;
+
+                $('#edit_tempo_garantia').datepicker({
+                    format: 'dd/mm/yyyy', // Formato da data
+                    autoclose: true, // Fecha o datepicker ao selecionar uma data
+                    todayHighlight: true // Destaca o dia atual
+                }).on('show.bs.modal', function(event) {
+                    event.stopPropagation();
+                });;
+            });
+
+            $(document).ready(function() {
+                $('#modalEditarProduto').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
-                    var clienteId = button.data('cliente-id');
-                    var clienteNome = button.data('cliente-nome');
-                    var clienteCPF = button.data('cliente-cpf');
-                    var clienteEndereco = button.data('cliente-endereco');
+                    var produtoId = button.data('produto-id');
+                    var produtoCodigo = button.data('produto-codigo');
+                    var produtoDescricao = button.data('produto-descricao');
+                    var produtoStatus = button.data('produto-status');
+                    var produtoTempoGarantia = button.data('produto-tempo_garantia');
 
                     var modal = $(this);
-                    modal.find('#edit_id').val(clienteId);
-                    modal.find('#edit_nome').val(clienteNome);
-                    modal.find('#edit_cpf').val(clienteCPF);
-                    modal.find('#edit_endereco').val(clienteEndereco);
+                    modal.find('#edit_id').val(produtoId);
+                    modal.find('#edit_codigo').val(produtoCodigo);
+                    modal.find('#edit_descricao').val(produtoDescricao);
+                    modal.find('#edit_status').val(produtoStatus).change();
+                    modal.find('#edit_tempo_garantia').val(produtoTempoGarantia);
 
                 });
 
-                // Salvar alteração cliente
+                // Salvar alteração produto
                 $('#btnSalvar').on('click', async function() {
                     // Capturar dados do formulário
-                    var id = $('#edit_id').val();
-                    var nome = $('#edit_nome').val();
-                    var cpf = $('#edit_cpf').val();
-                    var endereco = $('#edit_endereco').val();
+                    var produtoId = $('#edit_id').val();
+                    var produtoCodigo = $('#edit_codigo').val();
+                    var descricao = $('#edit_descricao').val();
+                    var status = $('#edit_status').val();
+                    var tempo_garantia = $('#edit_tempo_garantia').val();
 
                     // Enviar dados via AJAX
                     await $.ajax({
-                        url: '/Controller/clienteController.php',
+                        url: '/Controller/produtoController.php',
                         method: 'PUT',
                         data: JSON.stringify({
-                            id: id,
-                            nome: nome,
-                            cpf: cpf,
-                            endereco: endereco
+                            id: produtoId,
+                            codigo: produtoCodigo,
+                            descricao: descricao,
+                            status: status,
+                            tempo_garantia: tempo_garantia
                         }),
                         success: async function(response) {
                             console.log(response);
 
                             await Swal.fire({
                                 icon: 'success',
-                                title: 'Cliente alterado com sucesso!',
+                                title: 'Produto alterado com sucesso!',
                                 showConfirmButton: true,
                                 confirmButtonText: "Ok"
                             }).then((result => {
                                 if (result.isConfirmed) {
-                                    $('#modalEditarCliente').modal('hide');
+                                    $('#modalEditarProduto').modal('hide');
                                     // Redirecionar o usuário para a próxima página
                                     window.location = window.location.href;
                                 }
@@ -175,7 +213,7 @@
                             // Lidar com erros de requisição
                             console.error(error);
                             // Por exemplo, exibir uma mensagem de erro ao usuário
-                            alert('Erro ao alterar informações cliente. Por favor, tente novamente.');
+                            alert('Erro ao alterar informações produto. Por favor, tente novamente.');
                         }
                     });
                 });
@@ -184,7 +222,7 @@
                 $('#btnExcluir').on('click', function() {
                     Swal.fire({
                         title: 'Tem certeza?',
-                        text: 'Uma vez excluído, você não poderá recuperar este cliente!',
+                        text: 'Uma vez excluído, você não poderá recuperar este produto!',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -195,7 +233,7 @@
                         if (result.isConfirmed) {
                             // Enviar dados via AJAX
                             $.ajax({
-                                url: '/Controller/clienteController.php',
+                                url: '/Controller/produtoController.php',
                                 method: 'DELETE',
                                 data: JSON.stringify({
                                     id: $('#edit_id').val(),
@@ -205,12 +243,12 @@
 
                                     await Swal.fire({
                                         icon: 'success',
-                                        title: 'Cliente alterado com sucesso!',
+                                        title: 'Produto alterado com sucesso!',
                                         showConfirmButton: true,
                                         confirmButtonText: "Ok"
                                     }).then((result => {
                                         if (result.isConfirmed) {
-                                            $('#modalEditarCliente').modal('hide');
+                                            $('#modalEditarProduto').modal('hide');
                                             // Redirecionar o usuário para a próxima página
                                             window.location = window.location.href;
                                         }
@@ -220,16 +258,62 @@
                                     // Lidar com erros de requisição
                                     console.error(error);
                                     // Por exemplo, exibir uma mensagem de erro ao usuário
-                                    alert('Erro ao alterar informações cliente. Por favor, tente novamente.');
+                                    alert('Erro ao alterar informações produto. Por favor, tente novamente.');
                                 }
                             });
                             Swal.fire(
                                 'Excluído!',
-                                'O cliente foi excluído com sucesso.',
+                                'O produto foi excluído com sucesso.',
                                 'success'
                             ).then(() => {
-                                $('#modalEditarCliente').modal('hide');
+                                $('#modalEditarProduto').modal('hide');
                                 // Atualize a tabela ou a interface do usuário conforme necessário
+                            });
+                        }
+                    });
+                });
+
+                // Salvar novo Produto
+                $('#btnSalvarNovoProduto').on('click', async function() {
+                    // Capturar dados do formulário
+                    var descricao = $('#descricao').val();
+                    var status = $('#status').val();
+                    var tempo_garantia = $('#tempo_garantia').val();
+
+                    // Enviar dados via AJAX
+
+                    await $.ajax({
+                        url: '/Controller/produtoController.php',
+                        method: 'POST',
+                        data: {
+                            descricao: descricao,
+                            status: status,
+                            tempo_garantia: tempo_garantia
+                        },
+                        success: async function(response) {
+                            console.log(response);
+
+                            // Exibir mensagem de sucesso com SweetAlert2
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'Produto cadastrado com sucesso!',
+                                showConfirmButton: true,
+                                confirmButtonText: "OK"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Redirecionar ou fazer outra ação após confirmação
+                                    //window.location.href = window.location // Recarregar a página, por exemplo
+                                }
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Lidar com erros de requisição
+                            console.error(error);
+                            // Exibir mensagem de erro ao usuário
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro ao cadastrar produto',
+                                text: 'Por favor, tente novamente mais tarde.'
                             });
                         }
                     });
@@ -238,48 +322,7 @@
 
             // Adicionar evento de cancelar
             $('#btnCancelar').on('click', function() {
-                $('#modalEditarCliente').modal('hide');
-            });
-
-
-            // Salvar novo Cliente
-            $('#btnSalvarNovoCliente').on('click', async function() {
-                // Capturar dados do formulário
-                var nome = $('#nome').val();
-                var cpf = $('#cpf').val();
-                var endereco = $('#endereco').val();
-
-                // Enviar dados via AJAX
-                await $.ajax({
-                    url: '/Controller/clienteController.php',
-                    method: 'POST',
-                    data: {
-                        nome: nome,
-                        cpf: cpf,
-                        endereco: endereco
-                    },
-                    success: async function(response) {
-                        console.log(response);
-
-                        await Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente cadastrado com sucesso!',
-                            showConfirmButton: true,
-                            confirmButtonText: "Ok"
-                        }).then((result => {
-                            if (result.isConfirmed) {
-                                // Redirecionar o usuário para a próxima página
-                                window.location = window.location.href;
-                            }
-                        }));
-                    },
-                    error: function(xhr, status, error) {
-                        // Lidar com erros de requisição
-                        console.error(error);
-                        // Por exemplo, exibir uma mensagem de erro ao usuário
-                        alert('Erro ao salvar novo cliente. Por favor, tente novamente.');
-                    }
-                });
+                $('#modalEditarProduto').modal('hide');
             });
         </script>
 
