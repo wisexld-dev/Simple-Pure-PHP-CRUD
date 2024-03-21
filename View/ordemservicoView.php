@@ -94,9 +94,12 @@
                                 <div class="col-md-6">
                                     <label for="produtos_disponiveis" class="form-label">Produtos Disponíveis</label>
                                     <select class="form-select produtos-disponiveis" id="produtos_disponiveis" multiple>
-                                        <?php foreach ($produtos as $produto) { ?>
-                                            <option value="<?php echo $produto['id'] ?>" class="produto-disponivel"><?php echo $produto['descricao'] ?></option>
-                                        <?php } ?>
+                                        <?php foreach ($produtos as $produto) {
+                                            if ($produto['status']) {
+                                        ?>
+                                                <option value="<?php echo $produto['id'] ?>" class="produto-disponivel"><?php echo $produto['descricao'] ?></option>
+                                        <?php }
+                                        } ?>
                                     </select>
 
                                     <div class="invalid-feedback">Selecione ao menos um produto para abrir a Ordem de Serviço.</div>
@@ -151,9 +154,11 @@
                                 <div class="col-md-6">
                                     <label for="edit_produtos_disponiveis" class="form-label">Produtos Disponíveis</label>
                                     <select class="form-select produtos-disponiveis" id="edit_produtos_disponiveis" multiple>
-                                        <?php foreach ($produtos as $produto) { ?>
-                                            <option value="<?php echo $produto['id'] ?>" class="produto-disponivel"><?php echo $produto['descricao'] ?></option>
-                                        <?php } ?>
+                                        <?php foreach ($produtos as $produto) {
+                                            if ($produto['status']) { ?>
+                                                <option value="<?php echo $produto['id'] ?>" class="produto-disponivel"><?php echo $produto['descricao'] ?></option>
+                                        <?php }
+                                        } ?>
                                     </select>
                                     <div class="invalid-feedback">Selecione ao menos um produto para abrir a Ordem de Serviço.</div>
                                 </div>
@@ -341,7 +346,6 @@
                                 'success'
                             ).then(() => {
                                 $('#modalEditarOS').modal('hide');
-                                // Atualize a tabela ou a interface do usuário conforme necessário
                             });
                         }
                     });
@@ -452,6 +456,11 @@
                     $('#edit_produtos_selecionados').append('<li class="list-group-item product-item" data-product-id="' + productId + '">' + productName + '</li>');
                 });
 
+                $('#modalEditarOS').on('hidden.bs.modal', function(event) {
+                    if (!$('.modal-backdrop').length) {
+                        $('#edit_produtos_disponiveis option').show();
+                    }
+                });
 
             });
 
