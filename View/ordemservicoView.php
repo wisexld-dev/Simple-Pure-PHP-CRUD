@@ -135,7 +135,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="data_abertura" class="form-label">Data Abertura</label>
-                                    <input type="text" class="form-control" name="edit_data_abertura" id="edit_data_abertura" placeholder="Data de Abertura" required>
+                                    <input type="text" class="form-control" name="edit_data_abertura" id="edit_data_abertura" placeholder="Data de Abertura" disabled>
                                     <div class="invalid-feedback">Por favor, informe a data de abertura da Ordem de Serviço.</div>
                                 </div>
                             </div>
@@ -270,36 +270,47 @@
                         produtosSelecionados.push($(this).data('product-id'));
                     });
 
-                    await $.ajax({
-                        url: '/Controller/ordemservicoController.php',
-                        method: 'PUT',
-                        data: JSON.stringify({
-                            numero_os: numeroOS,
-                            data_abertura: dataAbertura,
-                            nome_consumidor: nomeConsumidor,
-                            cpf_consumidor: cpfConsumidor,
-                            produtos_selecionados: produtosSelecionados
-                        }),
-                        success: async function(response) {
-                            console.log(response);
+                    if (produtosSelecionados.length === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ordem de serviço requer ao menos um produto!',
+                            showConfirmButton: true,
+                            confirmButtonText: "Ok"
+                        }).then((result => {
+                            return
+                        }));
+                    } else {
+                        $.ajax({
+                            url: '/Controller/ordemservicoController.php',
+                            method: 'PUT',
+                            data: JSON.stringify({
+                                numero_os: numeroOS,
+                                data_abertura: dataAbertura,
+                                nome_consumidor: nomeConsumidor,
+                                cpf_consumidor: cpfConsumidor,
+                                produtos_selecionados: produtosSelecionados
+                            }),
+                            success: function(response) {
+                                console.log(response);
 
-                            await Swal.fire({
-                                icon: 'success',
-                                title: 'Ordem de Serviço alterada com sucesso!',
-                                showConfirmButton: true,
-                                confirmButtonText: "Ok"
-                            }).then((result => {
-                                if (result.isConfirmed) {
-                                    $('#modalEditarOS').modal('hide');
-                                    window.location.href = window.location;
-                                }
-                            }));
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
-                            alert('Erro ao alterar informações da ordem de serviço. Por favor, tente novamente.');
-                        }
-                    });
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Ordem de Serviço alterada com sucesso!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Ok"
+                                }).then((result => {
+                                    if (result.isConfirmed) {
+                                        $('#modalEditarOS').modal('hide');
+                                        window.location.href = window.location;
+                                    }
+                                }));
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                                alert('Erro ao alterar informações da ordem de serviço. Por favor, tente novamente.');
+                            }
+                        });
+                    }
                 });
 
 
@@ -326,7 +337,7 @@
 
                                     await Swal.fire({
                                         icon: 'success',
-                                        title: 'Ordem de Serviço alterado com sucesso!',
+                                        title: 'Ordem de Serviço excluída com sucesso!',
                                         showConfirmButton: true,
                                         confirmButtonText: "Ok"
                                     }).then((result => {
@@ -368,38 +379,51 @@
                         produtosSelecionadosIds.push(productId);
                     });
 
-                    await $.ajax({
-                        url: '/Controller/ordemservicoController.php',
-                        method: 'POST',
-                        data: {
-                            numero_os: numero_os,
-                            data_abertura: data_abertura,
-                            nome_consumidor: nome_consumidor,
-                            cpf_consumidor: cpf_consumidor,
-                            produtosId: produtosSelecionadosIds
-                        },
-                        success: async function(response) {
-                            await Swal.fire({
-                                icon: 'success',
-                                title: 'Ordem de Serviço cadastrado com sucesso!',
-                                showConfirmButton: true,
-                                confirmButtonText: "OK"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = window.location;
-                                }
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(error);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erro ao cadastrar ordemservico',
-                                text: 'Por favor, tente novamente mais tarde.'
-                            });
-                        }
-                    });
+                    if (produtosSelecionadosIds.length === 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ordem de serviço requer ao menos um produto!',
+                            showConfirmButton: true,
+                            confirmButtonText: "Ok"
+                        }).then((result => {
+                            return
+                        }));
+                    } else {
+
+                        await $.ajax({
+                            url: '/Controller/ordemservicoController.php',
+                            method: 'POST',
+                            data: {
+                                numero_os: numero_os,
+                                data_abertura: data_abertura,
+                                nome_consumidor: nome_consumidor,
+                                cpf_consumidor: cpf_consumidor,
+                                produtosId: produtosSelecionadosIds
+                            },
+                            success: async function(response) {
+                                await Swal.fire({
+                                    icon: 'success',
+                                    title: 'Ordem de Serviço cadastrado com sucesso!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: "OK"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = window.location;
+                                    }
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Erro ao cadastrar ordemservico',
+                                    text: 'Por favor, tente novamente mais tarde.'
+                                });
+                            }
+                        });
+                    }
                 });
+
 
                 // Ordena os produtos por ID na área de seleção de produtos da O.S
                 function ordenarSelect(select) {
