@@ -210,11 +210,13 @@
             });
 
             $(document).ready(function() {
+
+                // Funçao de abertura e carregamento de dados da O.S no modal de edição
                 $('#modalEditarOS').on('show.bs.modal', async function(event) {
                     var button = $(event.relatedTarget);
                     var numeroOS = button.data('ordemservico-numero');
 
-                    // Fazer requisição AJAX para obter os dados da ordem de serviço
+                    // Obter dados dos produtos da O.S
                     await $.ajax({
                         url: '/Controller/ordemservicoController.php',
                         method: 'POST',
@@ -268,7 +270,6 @@
                         produtosSelecionados.push($(this).data('product-id'));
                     });
 
-                    // Enviar dados via AJAX
                     await $.ajax({
                         url: '/Controller/ordemservicoController.php',
                         method: 'PUT',
@@ -314,7 +315,6 @@
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Enviar dados via AJAX
                             $.ajax({
                                 url: '/Controller/ordemservicoController.php',
                                 method: 'DELETE',
@@ -368,7 +368,6 @@
                         produtosSelecionadosIds.push(productId);
                     });
 
-                    // Enviar dados via AJAX
                     await $.ajax({
                         url: '/Controller/ordemservicoController.php',
                         method: 'POST',
@@ -402,6 +401,7 @@
                     });
                 });
 
+                // Ordena os produtos por ID na área de seleção de produtos da O.S
                 function ordenarSelect(select) {
                     var options = select.find('option');
                     options.detach().sort(function(a, b) {
@@ -412,6 +412,7 @@
                     select.append(options);
                 }
 
+                // Remove o produto da seleção de produtos da O.S
                 $('#produtos_selecionados').on('click', '.product-item', function() {
                     var productId = $(this).data('product-id');
                     var productName = $(this).text();
@@ -423,6 +424,7 @@
                     $('#produtos_disponiveis option[value="' + productId + '"]').show();
                 });
 
+                // Adiciona o produto à seleção de produtos da O.S
                 $('#produtos_disponiveis').on('click', 'option:selected', function() {
                     var productId = $(this).val();
                     var productName = $(this).text();
@@ -434,6 +436,7 @@
                     $('#produtos_selecionados').append('<li class="list-group-item product-item" data-product-id="' + productId + '">' + productName + '</li>');
                 });
 
+                // Remove o produto da seleção de produtos da O.S no modo edição
                 $('#edit_produtos_selecionados').on('click', '.product-item', function() {
                     var productId = $(this).data('product-id');
                     var productName = $(this).text();
@@ -445,6 +448,7 @@
                     $('#edit_produtos_disponiveis option[value="' + productId + '"]').show();
                 });
 
+                // Adiciona o produto à seleção de produtos da O.S no modo edição
                 $('#edit_produtos_disponiveis').on('click', 'option:selected', function() {
                     var productId = $(this).val();
                     var productName = $(this).text();
@@ -456,6 +460,7 @@
                     $('#edit_produtos_selecionados').append('<li class="list-group-item product-item" data-product-id="' + productId + '">' + productName + '</li>');
                 });
 
+                // Resetar exibição dos produtos após fade do backdrop
                 $('#modalEditarOS').on('hidden.bs.modal', function(event) {
                     if (!$('.modal-backdrop').length) {
                         $('#edit_produtos_disponiveis option').show();
@@ -464,7 +469,7 @@
 
             });
 
-            // Adicionar evento de cancelar
+            // Função de cancelamento de edição
             $('#btnCancelar').on('click', function() {
                 $('#modalEditarOS').modal('hide');
             });
