@@ -286,6 +286,7 @@
                             tempo_garantia: tempo_garantia
                         },
                         success: async function(response) {
+                            console.log(response);
 
                             // Exibir mensagem de sucesso com SweetAlert2
                             await Swal.fire({
@@ -296,6 +297,8 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.href = window.location
+                                    // Redirecionar ou fazer outra ação após confirmação
+                                    //window.location.href = window.location // Recarregar a página, por exemplo
                                 }
                             });
                         },
