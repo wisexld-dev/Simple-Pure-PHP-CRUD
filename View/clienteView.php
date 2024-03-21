@@ -41,12 +41,13 @@
             </thead>
             <tbody>
                 <?php
-                foreach ($clientes as $cliente) { ?>
+                foreach ($clientes as $cliente) {
+                    $cpf = substr($cliente['cpf'], 0, 3) . '.' . substr($cliente['cpf'], 3, 3) . '.' . substr($cliente['cpf'], 6, 3) . '-' . substr($cliente['cpf'], 9, 2); ?>
 
                     <tr data-bs-toggle="modal" data-bs-target="#modalEditarCliente" data-cliente-id="<?php echo $cliente['id'] ?>" data-cliente-nome="<?php echo $cliente['nome'] ?>" data-cliente-cpf="<?php echo $cliente['cpf'] ?>" data-cliente-endereco="<?php echo $cliente['endereco'] ?>">
                         <th scope="row"><?php echo $cliente['id'] ?></th>
                         <td><?php echo $cliente['nome'] ?></td>
-                        <td><?php echo $cliente['cpf'] ?></td>
+                        <td><?php echo $cpf ?></td>
                         <td><?php echo $cliente['endereco'] ?></td>
                     </tr>
 
