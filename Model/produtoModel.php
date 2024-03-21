@@ -1,18 +1,32 @@
 <?php
 
+/**
+ * Classe Produto para manipulação de dados de produtos no banco de dados.
+ */
 require_once("../Config/Database.php");
 require_once("../Model/baseModel.php");
 
 class Produto extends Model
 {
-
+    /**
+     * Conexão com o banco de dados.
+     * @var Connection
+     */
     public $connection;
 
+    /**
+     * Construtor da classe Produto.
+     * Inicializa a conexão com o banco de dados.
+     */
     public function __construct()
     {
         $this->connection = new Connection();
     }
 
+    /**
+     * Método para listar todos os produtos do banco de dados.
+     * @return mixed Uma matriz contendo os produtos ou uma mensagem de erro.
+     */
     public function listarProdutos()
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -29,6 +43,11 @@ class Produto extends Model
         }
     }
 
+    /**
+     * Método para cadastrar um novo produto no banco de dados.
+     * @param array $dados Os dados do produto a serem cadastrados.
+     * @return void
+     */
     public function cadastrarProduto(array $dados)
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -54,18 +73,23 @@ class Produto extends Model
 
                 if ($success) {
                     // Retornar uma resposta JSON válida
-                    return json_encode(["status" => "OK", "message" => "Produto cadastrado!"]);
+                    echo json_encode(["status" => "OK", "message" => "Produto cadastrado!"]);
                 } else {
                     // Retornar uma mensagem de erro
-                    return json_encode(["status" => "Erro", "message" => "Erro ao executar a consulta: " . implode(", ", $query_exec->errorInfo())]);
+                    echo json_encode(["status" => "Erro", "message" => "Erro ao executar a consulta: " . implode(", ", $query_exec->errorInfo())]);
                 }
             } catch (PDOException $e) {
                 // Em caso de erro, retornar uma mensagem de erro
-                return json_encode(["status" => "Erro", "message" => $e->getMessage()]);
+                echo json_encode(["status" => "Erro", "message" => $e->getMessage()]);
             }
         }
     }
 
+    /**
+     * Método para atualizar informações de um produto no banco de dados.
+     * @param array $dados Os novos dados do produto a serem atualizados.
+     * @return void
+     */
     public function atualizarProduto(array $dados)
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -81,13 +105,18 @@ class Produto extends Model
 
                 $query_exec->execute();
 
-                return json_encode("{status: \"OK\", message: \"Informaçoes do produto atualizadas!!\"}");
+                echo json_encode(["status" => "OK", "message" => "Informaçoes do produto atualizadas"]);
             } catch (PDOException $e) {
                 return $e->getMessage();
             }
         }
     }
 
+    /**
+     * Método para deletar um produto do banco de dados.
+     * @param string $id O ID do produto a ser excluído.
+     * @return void
+     */
     public function deletarProduto(string $id)
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -100,7 +129,7 @@ class Produto extends Model
 
                 $query_exec->execute();
 
-                return json_encode("{status: \"OK\", message: \"Produto deletado!\"}");
+                echo json_encode(["status" => "OK", "message" => "Produto deletado"]);
             } catch (PDOException $e) {
                 return $e->getMessage();
             }

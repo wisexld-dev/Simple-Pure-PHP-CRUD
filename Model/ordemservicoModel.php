@@ -6,13 +6,25 @@ require_once("../Model/baseModel.php");
 class OrdemServico extends Model
 {
 
+    /**
+     * Conexão com o banco de dados.
+     * @var Connection
+     */
     public $connection;
 
+    /**
+     * Construtor da classe OrdemServico.
+     * Inicializa a conexão com o banco de dados.
+     */
     public function __construct()
     {
         $this->connection = new Connection();
     }
 
+    /**
+     * Método para listar todas as ordens de serviço do banco de dados.
+     * @return mixed Uma matriz contendo as ordens de serviço ou uma mensagem de erro.
+     */
     public function listarOS()
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -37,6 +49,11 @@ class OrdemServico extends Model
         }
     }
 
+    /**
+     * Método para obter os produtos associados a uma ordem de serviço específica.
+     * @param string $numero_ordem O número da ordem de serviço.
+     * @return mixed Uma matriz contendo os produtos da ordem de serviço ou uma mensagem de erro.
+     */
     public function getProdutosOS($numero_ordem)
     {
         try {
@@ -56,6 +73,11 @@ class OrdemServico extends Model
         }
     }
 
+    /**
+     * Método para cadastrar uma nova ordem de serviço no banco de dados.
+     * @param array $dados Os dados da ordem de serviço a serem cadastrados.
+     * @return void
+     */
     public function cadastrarOS(array $dados)
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -173,6 +195,11 @@ class OrdemServico extends Model
         }
     }
 
+    /**
+     * Método para atualizar uma ordem de serviço existente no banco de dados.
+     * @param array $dados Os novos dados da ordem de serviço a serem atualizados.
+     * @return void
+     */
     public function atualizarOS(array $dados)
     {
         if ($this->connection->statusConexao() === "Conectado") {
@@ -247,6 +274,11 @@ class OrdemServico extends Model
         }
     }
 
+    /**
+     * Método para deletar uma ordem de serviço do banco de dados.
+     * @param string $numero_ordem O número da ordem de serviço a ser excluída.
+     * @return void
+     */
     public function deletarOS(string $numero_ordem)
     {
         if ($this->connection->statusConexao() === "Conectado") {

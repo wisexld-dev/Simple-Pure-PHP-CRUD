@@ -1,18 +1,34 @@
 <?php
 
+/**
+ * Classe ordemservicoController para manipulação de requisições relacionadas a ordens de serviço.
+ */
 require_once("./baseController.php");
 require_once("../Model/ordemservicoModel.php");
 require_once("../Model/produtoModel.php");
 
 class ordemservicoController extends Controller
 {
+    /**
+     * Instância do modelo OrdemServico.
+     * @var OrdemServico
+     */
     public $os;
 
+    /**
+     * Construtor da classe ordemservicoController.
+     * Inicializa a instância do modelo OrdemServico.
+     */
     public function __construct()
     {
         $this->os = new OrdemServico();
     }
 
+    /**
+     * Manipula a requisição recebida pelo controlador.
+     * Determina a ação com base no método HTTP.
+     * @return void
+     */
     public function handleRequest()
     {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -37,6 +53,11 @@ class ordemservicoController extends Controller
         }
     }
 
+    /**
+     * Manipula uma requisição GET.
+     * Lista todas as ordens de serviço e produtos associados.
+     * @return void
+     */
     private function handleGetRequest()
     {
         require_once("../Model/ordemservicoModel.php");
@@ -50,6 +71,11 @@ class ordemservicoController extends Controller
         require_once("../View/ordemservicoView.php");
     }
 
+    /**
+     * Manipula uma requisição POST.
+     * Executa diferentes ações com base nos parâmetros recebidos.
+     * @return void
+     */
     private function handlePostRequest()
     {
         if (!isset($_POST['action'])) {
@@ -60,7 +86,6 @@ class ordemservicoController extends Controller
         $action = trim($_POST['action']);
 
         if ($action === 'getProdutosOS') {
-
             $os = new OrdemServico();
             $produtosOS = $os->getProdutosOS($_POST['numero_ordem']);
 
@@ -71,7 +96,11 @@ class ordemservicoController extends Controller
         }
     }
 
-
+    /**
+     * Manipula uma requisição PUT.
+     * Atualiza uma ordem de serviço existente.
+     * @return void
+     */
     private function handlePutRequest()
     {
         $putDados = file_get_contents("php://input");
@@ -81,6 +110,11 @@ class ordemservicoController extends Controller
         $this->os->atualizarOS($dados);
     }
 
+    /**
+     * Manipula uma requisição DELETE.
+     * Deleta uma ordem de serviço existente.
+     * @return void
+     */
     private function handleDeleteRequest()
     {
         $putDados = file_get_contents("php://input");
