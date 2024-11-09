@@ -16,9 +16,7 @@ O projeto consiste em um CRUD feito em PHP puro, sem auxilio de Frameworks.
 
 Para executar este projeto localmente, siga estas etapas:
 
-1. Clone o repositório usando o seguinte comando:
-`git clone https://github.com/donburgareli/Simple-Pure-PHP-CRUD.git`
-
+1. Clone o repositório
 2. Crie um Banco de Dados no PgAdmin (WIN-1252)
 2. Execute o script de criação da estrutura banco de dados (DB_TesteRecrutamento_Telecontrol.sql).
 3. Altere as informações de conexão com o banco em Config/Database.php (TODO: .env)
